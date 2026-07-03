@@ -1,88 +1,231 @@
-# Deck — a UI for your CLI music player
+# Deck — Web-Based Music Player Powered by Data Structures
 
-This is a proper web UI wired up to the exact logic from your notebook (`DSA__final.ipynb`):
+Deck is a full-stack web application built on top of a command-line music player originally developed as a **Data Structures and Algorithms (DSA)** coursework project. While the user interface has evolved from a console application to a modern web application, the underlying algorithms and data structures remain unchanged.
 
-- **Playlist** → doubly linked list (`server/dsa.js` → `Playlist`)
-- **Play Next** → FIFO queue (`PlayNextQueue`)
-- **Party Mode** → binary max-heap keyed by votes (`PartyQueue`, same idea as `heapq` in the notebook)
-- **History** → stack, newest first (`History`)
-- **Play / Pause / Resume / Stop / Next / Filter by artist** → same behavior, now buttons instead of menu numbers
+The project demonstrates how fundamental data structures such as linked lists, queues, heaps, and stacks can be applied in a real-world application to manage music playback, playlists, history, and song prioritization.
 
-No login, no signup — it's the same single-user CLI tool, just with a screen.
+---
 
-Real audio plays in the browser (HTML5 `<audio>`), driven by whatever files you drop into `server/songs`. The Express server holds the same in-memory state the notebook did (current song, pause flag, playlist/queue/party/history) — it's just reachable over HTTP now instead of `input()`.
+## Overview
 
-## 1. Add your songs
+The application allows users to:
 
-Drop mp3 (or wav/ogg/m4a/flac) files into `server/songs/`.
+* Browse and search songs
+* Create and manage playlists
+* Queue songs to play next
+* Vote for songs in Party Mode
+* Control music playback (Play, Pause, Resume, Stop, Next, Previous)
+* View listening history
+* Filter songs by artist
 
-Files named exactly like the notebook's originals get their title/artist for free:
+Audio is streamed through the browser using the native HTML5 Audio API, while the server maintains the playback session and application state.
 
+---
+
+## Data Structures Used
+
+| Feature           | Data Structure     | Purpose                                                     |
+| ----------------- | ------------------ | ----------------------------------------------------------- |
+| Playlist          | Doubly Linked List | Efficient insertion, deletion, and bidirectional navigation |
+| Play Next Queue   | FIFO Queue         | Maintains songs in the order they are queued                |
+| Party Mode        | Binary Max Heap    | Prioritizes songs based on vote count                       |
+| Listening History | Stack              | Stores recently played songs in LIFO order                  |
+
+The playback priority follows the original CLI implementation:
+
+**Party Mode → Play Next Queue → Playlist**
+
+---
+
+## Technology Stack
+
+### Frontend
+
+* React
+* Vite
+* CSS
+* HTML5 Audio API
+
+### Backend
+
+* Node.js
+* Express.js
+
+### Language
+
+* JavaScript (ES6)
+
+---
+
+## Project Structure
+
+```text
+Deck/
+│
+├── client/
+│   ├── src/
+│   │   ├── components/
+│   │   ├── App.jsx
+│   │   ├── api.js
+│   │   └── icons.jsx
+│   └── package.json
+│
+├── server/
+│   ├── dsa.js
+│   ├── index.js
+│   ├── songs.json
+│   ├── songs/          (Git ignored)
+│   └── package.json
+│
+├── .gitignore
+├── README.md
+└── package.json
 ```
-shape.mp3     → Shape of You — Ed Sheeran
-believer.mp3  → Believer — Imagine Dragons
-someone.mp3   → Someone Like You — Adele
-numb.mp3      → Numb — Linkin Park
-closer.mp3    → Closer — Chainsmokers
+
+---
+
+## Installation
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/your-username/deck.git
+cd deck
 ```
 
-Any other filename still works — it just gets a title guessed from the filename (`morning_drive.mp3` → "Morning Drive") and "Unknown Artist". You can fix that by adding an entry to `server/songs.json`:
+### 2. Install Dependencies
+
+Backend
+
+```bash
+cd server
+npm install
+```
+
+Frontend
+
+```bash
+cd ../client
+npm install
+```
+
+---
+
+## Adding Songs
+
+Place audio files inside:
+
+```text
+server/songs/
+```
+
+Supported formats include:
+
+* MP3
+* WAV
+* OGG
+* M4A
+* FLAC
+
+The repository intentionally excludes audio files through `.gitignore`.
+
+To provide custom song titles and artist information, edit:
+
+```text
+server/songs.json
+```
+
+Example:
 
 ```json
 {
-  "your-file.mp3": { "title": "Track Title", "artist": "Artist Name" }
+  "shape.mp3": {
+    "title": "Shape of You",
+    "artist": "Ed Sheeran"
+  }
 }
 ```
 
-## 2. Install
+Files not listed in `songs.json` automatically use the filename as the title and **Unknown Artist** as the default artist.
+
+---
+
+## Running the Application
+
+Start the backend server:
 
 ```bash
-cd server && npm install
-cd ../client && npm install
-```
-
-## 3. Run
-
-Two terminals:
-
-```bash
-# terminal 1
 cd server
-npm run dev      # API + audio files on http://localhost:5175
+npm run dev
+```
 
-# terminal 2
+Backend:
+
+```text
+http://localhost:5175
+```
+
+Open a second terminal and start the frontend:
+
+```bash
 cd client
-npm run dev      # UI on http://localhost:5173
+npm run dev
 ```
 
-Open **http://localhost:5173**.
+Frontend:
 
-## Project structure
-
-```
-server/
-  index.js     Express API — one route per CLI menu option
-  dsa.js       Playlist (linked list), queue, heap, history
-  songs.json   filename → {title, artist} lookup
-  songs/       put your audio files here
-client/
-  src/
-    App.jsx              state + wiring
-    api.js                fetch wrapper for the server
-    components/
-      Sidebar.jsx
-      Library.jsx         browse + search + add to playlist/queue/party
-      PlaylistView.jsx
-      QueueView.jsx
-      PartyView.jsx        vote tracks up/down
-      HistoryView.jsx
-      PlayerBar.jsx        real audio playback, transport, seek, volume
+```text
+http://localhost:5173
 ```
 
-## Notes
+Open the frontend URL in your browser.
 
-- Party mode voting re-sorts the heap after every vote — small n, so this trades a little
-  efficiency for clarity, same spirit as the notebook.
-- "Previous track" walks the playlist's `prev` pointer (the linked list already had it, the
-  original CLI menu just never exposed it).
-- If the UI shows "Can't reach the server," start `server` first.
+---
+
+## API Endpoints
+
+| Method | Endpoint               | Description                     |
+| ------ | ---------------------- | ------------------------------- |
+| GET    | `/api/library`         | Retrieve all songs              |
+| GET    | `/api/library?artist=` | Filter songs by artist          |
+| GET    | `/api/playlist`        | Retrieve playlist               |
+| POST   | `/api/playlist/add`    | Add song to playlist            |
+| POST   | `/api/playlist/remove` | Remove song from playlist       |
+| GET    | `/api/queue`           | Retrieve play-next queue        |
+| POST   | `/api/queue/add`       | Add song to queue               |
+| POST   | `/api/queue/remove`    | Remove song from queue          |
+| GET    | `/api/party`           | Retrieve party queue            |
+| POST   | `/api/party/add`       | Add song to party queue         |
+| POST   | `/api/party/vote`      | Vote for a song                 |
+| GET    | `/api/history`         | Retrieve listening history      |
+| POST   | `/api/player/play`     | Play a song                     |
+| POST   | `/api/player/pause`    | Pause playback                  |
+| POST   | `/api/player/resume`   | Resume playback                 |
+| POST   | `/api/player/stop`     | Stop playback                   |
+| POST   | `/api/player/next`     | Play the next song              |
+| POST   | `/api/player/prev`     | Play the previous song          |
+| GET    | `/api/player/state`    | Retrieve current playback state |
+
+---
+
+## Key Implementation Details
+
+* Preserves the original DSA implementations from the command-line version.
+* Uses custom implementations of linked lists, queues, heaps, and stacks.
+* Maintains application state entirely in memory.
+* Streams audio using the HTML5 Audio element.
+* Implements a RESTful API using Express.js.
+* Organizes the frontend into reusable React components.
+* Automatically extracts song metadata when no custom mapping exists.
+
+---
+
+## Educational Objective
+
+This project demonstrates how classical data structures can be integrated into a modern full-stack web application. It bridges theoretical concepts from Data Structures and Algorithms with practical software engineering by applying custom implementations of linked lists, queues, heaps, and stacks to solve real application problems.
+
+---
+
+## License
+
+This project is intended for educational purposes. Feel free to modify and extend it for learning or personal use.
