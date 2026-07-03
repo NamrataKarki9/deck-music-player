@@ -1,6 +1,6 @@
 # Deck — Web-Based Music Player Powered by Data Structures
 
-Deck is a full-stack web application built on top of a command-line music player originally developed as a **Data Structures and Algorithms (DSA)** coursework project. While the user interface has evolved from a console application to a modern web application, the underlying algorithms and data structures remain unchanged.
+Deck is a full-stack web application built on top of a command-line music player originally developed as a **Data Structures and Algorithms (DSA)** project. While the user interface has evolved from a console application to a modern web application, the underlying algorithms and data structures remain unchanged.
 
 The project demonstrates how fundamental data structures such as linked lists, queues, heaps, and stacks can be applied in a real-world application to manage music playback, playlists, history, and song prioritization.
 
