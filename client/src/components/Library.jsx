@@ -77,4 +77,19 @@ export default function Library({ library, onPlay, currentSong, onAddPlaylist, o
   );
 }
 
-
+function EmptyLibrary() {
+  return (
+    <div className="empty-state">
+      <div className="empty-icon">
+        <IconDisc width={26} height={26} />
+      </div>
+      <p className="empty-title">No songs found</p>
+      <p>
+        Drop audio files into <code>server/songs</code> and refresh. Files named{" "}
+        <code>shape.mp3</code>, <code>believer.mp3</code>, <code>someone.mp3</code>,{" "}
+        <code>numb.mp3</code> or <code>closer.mp3</code> will pick up their original title and
+        artist automatically.
+      </p>
+    </div>
+  );
+}
