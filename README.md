@@ -1,108 +1,139 @@
-# Deck — Web-Based Music Player Powered by Data Structures
+# 🎵 Deck – Full-Stack Music Player
 
-Deck is a full-stack web application built on top of a command-line music player originally developed as a **Data Structures and Algorithms (DSA)** project. While the user interface has evolved from a console application to a modern web application, the underlying algorithms and data structures remain unchanged.
+Deck is a full-stack music player built with **React**, **Node.js**, and **Express.js** that demonstrates how fundamental data structures can power real-world applications. The application provides playlist management, music playback, song queuing, listening history, and a collaborative Party Mode, while exposing functionality through a RESTful API.
 
-The project demonstrates how fundamental data structures such as linked lists, queues, heaps, and stacks can be applied in a real-world application to manage music playback, playlists, history, and song prioritization.
-
----
-
-## Overview
-
-The application allows users to:
-
-* Browse and search songs
-* Create and manage playlists
-* Queue songs to play next
-* Vote for songs in Party Mode
-* Control music playback (Play, Pause, Resume, Stop, Next, Previous)
-* View listening history
-* Filter songs by artist
-
-Audio is streamed through the browser using the native HTML5 Audio API, while the server maintains the playback session and application state.
+The project showcases the practical application of custom implementations of linked lists, queues, heaps, and stacks within a modern web application.
 
 ---
 
-## Data Structures Used
+## 🚀 Features
 
-| Feature           | Data Structure     | Purpose                                                     |
-| ----------------- | ------------------ | ----------------------------------------------------------- |
-| Playlist          | Doubly Linked List | Efficient insertion, deletion, and bidirectional navigation |
-| Play Next Queue   | FIFO Queue         | Maintains songs in the order they are queued                |
-| Party Mode        | Binary Max Heap    | Prioritizes songs based on vote count                       |
-| Listening History | Stack              | Stores recently played songs in LIFO order                  |
-
-The playback priority follows the original CLI implementation:
-
-**Party Mode → Play Next Queue → Playlist**
+- Browse and search songs
+- Create and manage playlists
+- Queue songs to play next
+- Vote for songs in Party Mode
+- Music playback controls
+  - Play
+  - Pause
+  - Resume
+  - Stop
+  - Next / Previous
+- View listening history
+- Filter songs by artist
+- RESTful backend API
+- Browser audio streaming using the HTML5 Audio API
 
 ---
 
-## Technology Stack
+## 🏗 Architecture
+
+```
+            React Frontend
+                  │
+          REST API Requests
+                  │
+          Express.js Server
+                  │
+     ┌────────────┼────────────┐
+     │            │            │
+ Playlist      Queue      Party Mode
+Linked List     Queue      Max Heap
+     │            │            │
+     └────────────┼────────────┘
+                  │
+          Playback Controller
+                  │
+          Listening History
+                Stack
+```
+
+Playback priority:
+
+```
+Party Mode
+      ↓
+Play Next Queue
+      ↓
+Playlist
+```
+
+---
+
+## 📚 Data Structures
+
+| Feature | Data Structure | Purpose |
+|----------|---------------|----------|
+| Playlist | Doubly Linked List | Efficient insertion, deletion, and navigation |
+| Play Next | FIFO Queue | Maintains queued playback order |
+| Party Mode | Binary Max Heap | Prioritizes songs by votes |
+| Listening History | Stack | Stores recently played songs |
+
+---
+
+## 💻 Tech Stack
 
 ### Frontend
 
-* React
-* Vite
-* CSS
-* HTML5 Audio API
+- React
+- Vite
+- JavaScript (ES6)
+- HTML5 Audio API
+- CSS
 
 ### Backend
 
-* Node.js
-* Express.js
+- Node.js
+- Express.js
 
-### Language
+### Tools
 
-* JavaScript (ES6)
+- Git
+- npm
 
 ---
 
-## Project Structure
+## 📁 Project Structure
 
 ```text
 Deck/
 │
 ├── client/
 │   ├── src/
-│   │   ├── components/
-│   │   ├── App.jsx
-│   │   ├── api.js
-│   │   └── icons.jsx
+│   ├── App.jsx
+│   ├── api.js
 │   └── package.json
 │
 ├── server/
 │   ├── dsa.js
 │   ├── index.js
 │   ├── songs.json
-│   ├── songs/          (Git ignored)
+│   ├── songs/
 │   └── package.json
 │
-├── .gitignore
 ├── README.md
-└── package.json
+├── package.json
+└── .gitignore
 ```
 
 ---
 
-## Installation
+## ⚙ Installation
 
-### 1. Clone the Repository
+Clone the repository
 
 ```bash
 git clone https://github.com/your-username/deck.git
 cd deck
 ```
 
-### 2. Install Dependencies
-
-Backend
+Install backend dependencies
 
 ```bash
 cd server
 npm install
 ```
 
-Frontend
+Install frontend dependencies
 
 ```bash
 cd ../client
@@ -111,121 +142,113 @@ npm install
 
 ---
 
-## Adding Songs
+## ▶ Running the Project
 
-Place audio files inside:
-
-```text
-server/songs/
-```
-
-Supported formats include:
-
-* MP3
-* WAV
-* OGG
-* M4A
-* FLAC
-
-The repository intentionally excludes audio files through `.gitignore`.
-
-To provide custom song titles and artist information, edit:
-
-```text
-server/songs.json
-```
-
-Example:
-
-```json
-{
-  "shape.mp3": {
-    "title": "Shape of You",
-    "artist": "Ed Sheeran"
-  }
-}
-```
-
-Files not listed in `songs.json` automatically use the filename as the title and **Unknown Artist** as the default artist.
-
----
-
-## Running the Application
-
-Start the backend server:
+Start the backend
 
 ```bash
 cd server
 npm run dev
 ```
 
-Backend:
+Backend
 
-```text
+```
 http://localhost:5175
 ```
 
-Open a second terminal and start the frontend:
+Start the frontend
 
 ```bash
 cd client
 npm run dev
 ```
 
-Frontend:
+Frontend
 
-```text
+```
 http://localhost:5173
 ```
 
-Open the frontend URL in your browser.
+---
+
+## 🎵 Adding Songs
+
+Place audio files inside
+
+```
+server/songs/
+```
+
+Supported formats
+
+- MP3
+- WAV
+- FLAC
+- OGG
+- M4A
+
+Edit
+
+```
+server/songs.json
+```
+
+to customize song titles and artist information.
 
 ---
 
-## API Endpoints
+## 🌐 API Endpoints
 
-| Method | Endpoint               | Description                     |
-| ------ | ---------------------- | ------------------------------- |
-| GET    | `/api/library`         | Retrieve all songs              |
-| GET    | `/api/library?artist=` | Filter songs by artist          |
-| GET    | `/api/playlist`        | Retrieve playlist               |
-| POST   | `/api/playlist/add`    | Add song to playlist            |
-| POST   | `/api/playlist/remove` | Remove song from playlist       |
-| GET    | `/api/queue`           | Retrieve play-next queue        |
-| POST   | `/api/queue/add`       | Add song to queue               |
-| POST   | `/api/queue/remove`    | Remove song from queue          |
-| GET    | `/api/party`           | Retrieve party queue            |
-| POST   | `/api/party/add`       | Add song to party queue         |
-| POST   | `/api/party/vote`      | Vote for a song                 |
-| GET    | `/api/history`         | Retrieve listening history      |
-| POST   | `/api/player/play`     | Play a song                     |
-| POST   | `/api/player/pause`    | Pause playback                  |
-| POST   | `/api/player/resume`   | Resume playback                 |
-| POST   | `/api/player/stop`     | Stop playback                   |
-| POST   | `/api/player/next`     | Play the next song              |
-| POST   | `/api/player/prev`     | Play the previous song          |
-| GET    | `/api/player/state`    | Retrieve current playback state |
-
----
-
-## Key Implementation Details
-
-* Preserves the original DSA implementations from the command-line version.
-* Uses custom implementations of linked lists, queues, heaps, and stacks.
-* Maintains application state entirely in memory.
-* Streams audio using the HTML5 Audio element.
-* Implements a RESTful API using Express.js.
-* Organizes the frontend into reusable React components.
-* Automatically extracts song metadata when no custom mapping exists.
+| Method | Endpoint | Description |
+|---------|----------|-------------|
+| GET | `/api/library` | Retrieve all songs |
+| GET | `/api/library?artist=` | Filter by artist |
+| GET | `/api/playlist` | Retrieve playlist |
+| POST | `/api/playlist/add` | Add song |
+| POST | `/api/playlist/remove` | Remove song |
+| GET | `/api/queue` | Retrieve queue |
+| POST | `/api/queue/add` | Queue song |
+| GET | `/api/party` | Retrieve party queue |
+| POST | `/api/party/add` | Add party song |
+| POST | `/api/party/vote` | Vote song |
+| GET | `/api/history` | Listening history |
+| POST | `/api/player/play` | Play |
+| POST | `/api/player/pause` | Pause |
+| POST | `/api/player/resume` | Resume |
+| POST | `/api/player/stop` | Stop |
+| POST | `/api/player/next` | Next |
+| POST | `/api/player/prev` | Previous |
+| GET | `/api/player/state` | Playback state |
 
 ---
 
-## Educational Objective
+## ✨ Key Highlights
 
-This project demonstrates how classical data structures can be integrated into a modern full-stack web application. It bridges theoretical concepts from Data Structures and Algorithms with practical software engineering by applying custom implementations of linked lists, queues, heaps, and stacks to solve real application problems.
+- Full-stack application using React and Express.js
+- RESTful API architecture
+- Custom implementations of linked lists, queues, heaps, and stacks
+- Modular frontend with reusable React components
+- Browser-based music streaming
+- Priority-based playback using a Binary Max Heap
+- Playlist and playback management
+- Dynamic artist filtering and search
 
 ---
 
-## License
+## 🚀 Future Improvements
 
-This project is intended for educational purposes. Feel free to modify and extend it for learning or personal use.
+- User authentication
+- Persistent database storage
+- Playlist sharing
+- User favorites
+- Shuffle and repeat modes
+- Album artwork support
+- Real-time collaborative Party Mode using WebSockets
+- Docker deployment
+
+---
+
+## 📄 License
+
+This project is intended for educational and portfolio purposes.
